@@ -1,0 +1,49 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Fyyur | Artists Search{% endblock %}
+{% block content %}
+<h3>Number of search results for "{{ search_term }}": {{ results.count }}</h3>
+<ul class="items">
+	{% for artist in results.data %}
+	<li>
+		<a href="/artists/{{ artist.id }}">
+			<i class="fas fa-users"></i>
+			<div class="item">
+				<h5>{{ artist.name }}</h5> 
+			</div>
+		</a>
+		<i><button data-toggle="modal" data-target="#addShow" data-artist="{{ artist.id }}" class="btn btn-primary btn-lg">Choose for Show</button></i>
+
+	</li>
+	{% endfor %}
+</ul>
+<!-- Modal -->
+<div class="modal fade" id="addShow" tabindex="-1" role="dialog" aria-labelledby="addShowLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="addShowLabel">Choose Show date and time</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+				<form action="/shows/create" method="post" class="form">
+						<h3 class="form-heading">List a new show</h3>
+						<div class="form-group">
+						  {{ form.artist_id(class_ = 'form-control', id='artist', type='hidden', autofocus = true) }}
+						</div>
+						<div class="form-group">
+						  {{ form.venue_id(class_ = 'form-control', type='hidden',autofocus = true, value=results.venue) }}
+						</div>
+						<div class="form-group">
+							<label for="start_time">Start Time</label>
+							{{ form.start_time(class_ = 'form-control', placeholder='YYYY-MM-DD HH:MM', autofocus = true) }}
+						  </div>
+						  <input type="submit" value="Create Venue" class="btn btn-primary btn-lg btn-block">
+					  </form>
+		</div>
+	  </div>
+	</div>
+  </div>
+
+{% endblock %}
